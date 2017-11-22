@@ -1,0 +1,71 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: #e0e0e0;
+	font-family: 'Roboto', sans-serif;
+}
+
+
+button {
+	border: solid;
+	border-radius: 8px;
+	color: black;
+	background-color: #a69b97;
+	padding: 10px 10px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	margin: auto;
+	font-size: 14px;
+}
+
+nav a {
+	background-color: #a69b97;
+	display: block;
+	float: left;
+	font-family: 'Roboto', sans-serif;
+    clear: right;
+	color: black;
+	padding: 14px 16px;
+	text-align: center;
+}
+
+nav a:hover {
+	background-color: #494949;
+	color: white;
+}
+
+nav a.current {
+	background-color: pink;
+	color: #494949;
+}
+
+.intro-text, .wine-text {
+	margin: 0 auto;
+	padding: 20px;
+	width: 70%;
+}
+
+.main-section {
+    display: inline-block;
+	float: left;
+	margin: 0 auto;
+}
+
+#wine-container,
+.topping-options {
+	display: inline-block;
+	margin: auto;
+	padding: 20px;
+	position: relative;
+	text-align: center;
+}
+
+.topping-options img {
+    width: 200px;
+    margin: 5px;
+}
