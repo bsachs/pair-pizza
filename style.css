@@ -69,3 +69,8 @@ nav a.current {
     width: 200px;
     margin: 5px;
 }
+
+#map {
+  height: 550px;
+  width: 900px;
+}

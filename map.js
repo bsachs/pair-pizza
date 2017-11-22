@@ -1,186 +1,62 @@
-var GOOGLE_MAPS_URL = "https://maps.googleapis.com/maps/api/geocode/json";
-var state = {
-    defaultLocation: {
-        lat: 42.360,
-        lng: -71.0589
-    }
-};
-
-
-function getLocationDataFromApi(inputLocation, callback) {              //JSON request to get latitude, longitude of input
-    var locationApiKey ="AIzaSyAr004bLTHFlhK59zz0FW27MYg9xWFUDd8";
-    var query = {
-        address: inputLocation,
-        key: locationApiKey
-    }
-    $.getJSON(GOOGLE_MAPS_URL, query, callback);
-}
-
-function setState(data) {
-    setLocation(data);
-    setSearchParameters();
-    initMap();
-}
-
-function setLocation(data) {    //returns latitude, longitude on input location
-    state = {
-        lat: data.results[0].geometry.location.lat,
-        lng: data.results[0].geometry.location.lng
-    };
-}
-
-function setSearchParameters() {
-    state.searchObj = getSearchParams();
-}
-
-//----------------------------------Map-----------------------------------------
-var map;
-var infowindow;
-
 function initMap() {
-
-    if ((typeof state.lat == "undefined") && (typeof state.lng == "undefined")) {
-        //If no location is in the form, temp lat and temp lng to init map.
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: state.defaultLocation,
-            zoom: 12
-        });
-        return;
-    }
-
-    var stateSearchObject = state.searchObj;
-    var inputLocation = { lat: state.lat, lng: state.lng };
-
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: inputLocation,
-        zoom: 12
-    });
-
-    infowindow = new google.maps.InfoWindow();
-    var service = new google.maps.places.PlacesService(map);
-    //this would iterate over each cuisine
-    stateSearchObject.inputCusineProp.forEach(function (item) {
-        service.textSearch({
-            query: item,
-            location: inputLocation,
-            radius: stateSearchObject.inputRadiusProp,
-            type: "restaurant",
-            rankBy: google.maps.places.RankBy.PROMINENCE
-        }, renderResults);
-    });
-
+  var center = {
+    lat: 38.539069,
+    lng: -121.755094
+  };
+  var map = new google.maps.Map(document.getElementById('map'), {
+   center: center,
+    zoom: 16,
+    mapTypeControl: false,
+    scaleControl: true,
+    zoomControl: true,
+    streetViewControl: false
+  });
+  setMarkers(map);
 }
 
-function renderResults(results, status) {
-    if (status === google.maps.places.PlacesServiceStatus.OK) {
-        displayGoogleSearchData(results);
-        for (var i = 0; i < results.length; i++) {
-            createMarker(results[i]);
-        }
-    }
-}
+var groups = [
+  ['Group 1', 38.5407475228024, -121.748492717743],
+  ['Group 2', 38.5421657099453, -121.756362318993],
+  ['Group 3', 38.5421321437088, -121.750096678734],
+  ['Group 4', 38.5426859846077, -121.759044528008],
+  ['Group 5', 38.540990882347,
+-121.761364638805],
+  ['Group 6', 38.5388174007006, -121.75291031599],
+  ['Group 7', 38.5360312200671, -121.757885813713],
+  ['Group 8', 38.5433740840259, -121.759162545204],
+  ['Group 9', 38.5395768679688, -121.754862964153],
+  ['Group 10', 38.5439950461421, -121.749313473701],
+  ['Group 11', 38.53960623947, -121.756045818329]
+];
 
-function createMarker(place) {
-    var placeLoc = place.geometry.location;
+function setMarkers(map) {
+  var bounds = new google.maps.LatLngBounds();
+  var infowindow = new google.maps.InfoWindow();
+
+
+
+  for (var i = 0; i < groups.length; i++) {
+    var group = groups[i];
+    var content = group[0];
+    var markerLatLng = new google.maps.LatLng(group[1], group[2]);
     var marker = new google.maps.Marker({
-        map: map,
-        position: place.geometry.location
+      position: markerLatLng,
+      map: map,
+      title: group[0],
+      animation: google.maps.Animation.DROP
     });
 
-    google.maps.event.addListener(marker, "click", function () {
-        infowindow.setContent(place.name);
-        infowindow.open(map, this);
-    });
+    bounds.extend(markerLatLng);
+
+    google.maps.event.addListener(marker,"click", (function(marker,content,infowindow){
+      return function() {
+        infowindow.setContent(content);
+        infowindow.open(map, marker);
+      };
+    })(marker,content,infowindow));
+
+    map.fitBounds(bounds);
+
+  }
+
 }
-
-function displayGoogleSearchData(results) {
-    var resultState = [];
-    var resultElement = "";
-    var openNow = "";
-    var priceLevel = "";
-    if (results) {
-        $(".rating-sort").removeClass("no-show");    //reveal sort button
-        results.forEach(function (item) {
-            if (item.opening_hours) {
-                if (item.opening_hours.open_now == true) {
-                    openNow = "   <span class = "open_color">Open now</span>";
-                }
-                else {
-                    openNow = "   <span class = "closed_color">Closed now</span>";
-                }
-            }
-            if (item.price_level == 1) { priceLevel = "    $"; }
-            if (item.price_level == 2) { priceLevel = "    $$"; }
-            if (item.price_level == 3) { priceLevel = "    $$$"; }
-            if (item.price_level == 4) { priceLevel = "    $$$$"; }
-            var resultRow = "<div class = 'result-row'><p><b>Restaurant  </b> " + item.name + " " + openNow + " " + "</p><p><b>Address  </b> " + item.formatted_address + "</p><p><b>Rating  </b> " + item.rating + "<span class = 'dollar'>" + priceLevel + "</span>" + "</p></div>";
-            if (item.rating) {
-                resultState.push([item.rating.toString(), resultRow]);
-            }
-
-            resultElement = resultElement + resultRow;
-        });
-    }
-    else {
-        return "No results were found.";
-    }
-    $(".js-results").append(resultElement);
-
-
-    //Action on clicking 'Sort by Ratings' button
-    $(".rating-sort").on("click", function (event) {
-        event.preventDefault();
-        var sortResultElement = "";
-        $(".js-results").empty();
-        resultState.sort().reverse();
-        for (var item in resultState) {
-            sortResultElement = sortResultElement + resultState[item][1];
-        }
-        $(".js-results").html(sortResultElement);
-    });
-}
-
-
-//-----------------------------------------Map Marker ends---------------------------
-
-
-
-//---------------------------------------Input data from form------------------------------
-$(".listing").click(function (event) {
-    event.preventDefault();
-    $('.js-results').empty();
-    var inputLocation = $(".location").val();
-    getLocationDataFromApi(inputLocation, setState);   //returns latitude, longitude of input location
-});
-
-function getSearchParams() {
-    var inputRadius = $(".radius").val() * 1610;            //converting input miles to meters
-    var cuisineSelection = [];
-    $(".selection:checked").each(function (i) {
-        cuisineSelection.push($(this).val());
-    });
-
-    return { inputCusineProp: cuisineSelection, inputRadiusProp: inputRadius };
-}
-
-//--------------------------------------- Map scroll------------------------------
-function mapScroll() {
-    var element = $(".follow-scroll"),
-        originalY = element.offset().top;
-
-    // Space between element and top of screen (when scrolling)
-    var topMargin = -50;
-    element.css("position", "relative");
-
-    $(window).on("scroll", function(event) {
-        var scrollTop = $(window).scrollTop();
-
-        element.stop(false, false).animate({
-            top: scrollTop < originalY
-                    ? 0
-                    : scrollTop - originalY + topMargin
-        }, 300);
-    });
-};
-
-$(mapScroll);
