@@ -1,51 +1,64 @@
 <!doctype html>
 <html>
 <head>
-    <!-- jQuery -->
-    <!--<script src="lib/jquery.js"></script>-->
+    <title>Pair My Pizza</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- jQuery and bootstrap CDN-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- handlebars -->
-    <!--<script src="lib/handlebars-v4.0.11.js"></script>-->
-    <!--- CDN link -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--- Handlebars CDN link -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
     <!-- custom JavaScript -->
     <script src="main.js"></script>
-    <!-- custom CSS -->
-    <link href="https://fonts.googleapis.com/css?family=Pangolin|Roboto" rel="stylesheet"/>
+    <!--custom styles -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lobster|Raleway" rel="stylesheet"/>
     <link href="animate.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-    <title>Pair My Pizza</title>
 </head>
-
 <body>
-<nav>
-<a class="current" href="./index.html">Home</a>
-<a href="./wine.html">Pair My Wine</a>
-<a href="./map.html">Find a Pair</a>
-<a href="./shopping-cart.html">References</a>
-</nav>
-
-<!--<div class="test-animation">
-    <img class="bounce animated" src="icons/1213455-200.png">
-</div>-->
-
-<div class="main-section">
+<div class="container-fluid">
+    <div class="row content">
+    <!--Sidenav code -->
+    <div class="col-sm-2 col-lg-2">
+    <div class="wrapper">
+        <nav id="sidenav">
+            <img class="img-responsive" src="icons/1Asset3.png" alt="logo">
+            <p id="main-nav-text">Thoughtful wine and pizza pairings</p>
+            <ul class="list-unstyled components">
+                <li class="active"><a href="./index.html">Home</a></li>
+                <li><a href="./map.html">Find a Pair</a></li>
+                <li><a href="#references" data-toggle="collapse" aria-expanded="false">References</a>
+                    <ul class="collapse list-unstyled" id="references">
+                        <li><a href="http://drinks.seriouseats.com/2013/02/ask-a-sommelier-best-wine-for-pizza-pairing-good-italian-wine-advice-slideshow.html">Serious Eats</a></li>
+                        <li><a href="https://www.thespruce.com/great-wines-for-pizza-night-3511108">The Spruce</a></li>
+                        <li><a href="http://winefolly.com/tutorial/pizza-wine/">Wine Folly</a></li>
+                    </ul>
+                </ul>
+        </nav>
+    </div>
+    </div>
+    <!--- Main body content -->
+    <button type="button" id="sidenavCollapse" class="btn btn-info navbar-btn">
+        <i class="glyphicon glyphicon align-left"></i>
+        Show Menu
+    </button>
     <div class="intro-text">
-        <h1>Who doesn't love a good wine with their pizza? Find out the best pairings!</h1>
+        <h3>Select a pizza topping type to get a specific wine recommendation!</h3>
     </div>
 
-    <div id="pizza-topping-container">
-    </div>
-
-    <div id="wine-container">
+    <div class="col-sm-6 col-lg-5"><div id="pizza-topping-container"></div></div>
+    <div class="col-sm-4 col-lg-5"><div id="wine-container"></div></div>
     </div>
 </div>
+
 <!-- Show toppings for selection --->
 <script id="toppings-template" type="text/x-handlebars-template">
     {{#each toppings}}
         <div class="topping-options" id={{ id }}>
-            <h4> {{ name }} </h4>
-            <img src={{ img }}>
+            <h4 class = "bounceInDown animated"> {{ name }} </h4>
+            <img class = "bounceInDown animated" src={{ img }}>
         </div>
     {{/each}}
 </script>
@@ -54,9 +67,13 @@
 <script id="wine-template" type="text/x-handlebars-template">
     <div class="wine-match">
         <img class="slideInLeft animated" src={{ wineImg }}>
-        <h1>{{ wine }}</h1>
-        <h3>{{ wineText }}</h3>
-        <button class="redo" onClick="window.location.reload()">Pair again</button>
+        <h3>{{ name }}</h3>
+        <h4>with: </h4>
+        <h2 class="wineFont">{{ wine }}</h2>
+        <br>
+        <h4>{{ wineText }}</h4>
+        <br>
+        <button type="button" class="btn" onClick="window.location.reload()">Pair again</button>
     </div>
 </script>
 </body>

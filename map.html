@@ -1,32 +1,51 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <!-- jQuery -->
-      <!--<script src="lib/jquery.js"></script>-->
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      <!-- handlebars -->
-      <!--<script src="lib/handlebars-v4.0.11.js"></script>-->
-      <!--- CDN link -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
-      <!-- custom JavaScript -->
-      <script src="map.js"></script>
-      <!-- custom CSS -->
-      <link href="https://fonts.googleapis.com/css?family=Pangolin|Roboto" rel="stylesheet"/>
-      <link href="animate.css" rel="stylesheet">
-      <link href="style.css" rel="stylesheet">
-      <title>Pair My Pizza</title>
+    <title>Pair My Pizza</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--jQuery and Bootstrap CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- custom JavaScript -->
+    <script src="map2.js"></script>
+    <!-- custom CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lobster|Raleway" rel="stylesheet"/>
+    <link href="style.css" rel="stylesheet">
 </head>
 
 <body>
-    <nav>
-    <a href="./index.html">Home</a>
-    <a href="./wine.html">Pair My Wine</a>
-    <a class="current" href="./map.html">Find a Pair</a>
-    <a href="./shopping-cart.html">References</a>
-    </nav>
+<div class="container-fluid">
+<div class="row content">
+    <!--Sidenav code -->
+    <div class="col-sm-2 col-lg-2">
+    <div class="wrapper">
+        <nav id="sidenav">
+            <img class="img-responsive" src="icons/1Asset3.png" alt="logo">
+            <ul class="list-unstyled components">
+                <li><a href="./index.html">Home</a></li>
+                <li class="active"><a href="./map.html">Find a Pair</a></li>
+                <li><a href="#references" data-toggle="collapse" aria-expanded="false">References</a>
+                    <ul class="collapse list-unstyled" id="references">
+                        <li><a href=a href="https://www.thrillist.com/eat/pittsburgh/best-pizza-in-pittsburgh">Thrillist</a></li>
+                    </ul>
+            </ul>
+        </nav>
+    </div>
+    </div>
 
-
-<div id="map">
+    <div class="col-sm-10">
+    <!--- Main body content -->
+        <h3>Find the best pizza places and wine shops in Pittsburgh!</h3>
+        <div class="button-panel">
+            <input id="mapbtn" onclick="showWineMarkers();" type=button value="Show Best Wine">
+            <input id="mapbtn" onclick="showPizzaMarkers();" type=button value="Show Best Pizza">
+            <input id="mapbtn" onclick="window.location.reload();" type=button value="Clear Map">
+        </div>
+        <div id="map"></div>
+        </div>
+</div>
 </div>
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAr004bLTHFlhK59zz0FW27MYg9xWFUDd8&callback=initMap"></script>
